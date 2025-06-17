@@ -1,0 +1,35 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Test coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.nojunk
+
+# Local development data
+Python_Docker_Image/data/
+
+# Include required files
+!requirements.txt
+!app.py
+!Python_Docker_Image/init_db.py
