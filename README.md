@@ -91,6 +91,132 @@ L'application sera accessible sur http://localhost:5000
 }
 ```
 
+### 5. Modifier un utilisateur
+- **URL**: `/user/<id>`
+- **Méthode**: PUT
+- **Nécessite d'être connecté**
+- **Nécessite d'être l'utilisateur en question**
+- **Corps de la requête**:
+```json
+{
+    "username": "nouveau_nom_utilisateur",
+    "email": "nouvel_email@example.com",
+    "password": "nouveau_mot_de_passe"
+}
+```
+- **Note**: Vous pouvez mettre à jour un ou plusieurs champs en même temps
+- **Réponse en cas de succès**:
+```json
+{
+    "message": "User updated successfully",
+    "user": {
+        "id": 1,
+        "username": "nouveau_nom_utilisateur",
+        "email": "nouvel_email@example.com",
+        "created_at": "2025-06-17T21:10:11+00:00"
+    }
+}
+```
+
+### 6. Supprimer un utilisateur
+- **URL**: `/user/<id>`
+- **Méthode**: DELETE
+- **Nécessite d'être connecté**
+- **Nécessite d'être l'utilisateur en question**
+- **Réponse**:
+```json
+{
+    "message": "User deleted successfully"
+}
+```
+- **Note**: Vous serez automatiquement déconnecté après la suppression
+
+### 7. Supprimer tous les utilisateurs
+- **URL**: `/users/delete-all`
+- **Méthode**: DELETE
+- **Nécessite d'être connecté**
+- **Réponse**:
+```json
+{
+    "message": "All users except current user deleted successfully"
+}
+```
+- **Note**: Supprime tous les utilisateurs sauf celui qui fait la requête
+
+### 1. Inscription (Register)
+- **URL**: `/register`
+- **Méthode**: POST
+- **Corps de la requête**:
+```json
+{
+    "username": "votre_nom_utilisateur",
+    "email": "votre_email@example.com",
+    "password": "votre_mot_de_passe"
+}
+```
+- **Réponse en cas de succès**:
+```json
+{
+    "message": "User registered successfully",
+    "user": {
+        "id": 1,
+        "username": "votre_nom_utilisateur",
+        "email": "votre_email@example.com",
+        "created_at": "2025-06-17T21:10:11+00:00"
+    }
+}
+```
+
+### 2. Connexion (Login)
+- **URL**: `/login`
+- **Méthode**: POST
+- **Corps de la requête**:
+```json
+{
+    "username": "votre_nom_utilisateur",
+    "password": "votre_mot_de_passe"
+}
+```
+- **Réponse en cas de succès**:
+```json
+{
+    "message": "Logged in successfully",
+    "user": {
+        "id": 1,
+        "username": "votre_nom_utilisateur",
+        "email": "votre_email@example.com"
+    }
+}
+```
+
+### 3. Déconnexion (Logout)
+- **URL**: `/logout`
+- **Méthode**: POST
+- **Réponse**:
+```json
+{
+    "message": "Logged out successfully"
+}
+```
+
+### 4. Liste des utilisateurs
+- **URL**: `/users`
+- **Méthode**: GET
+- **Nécessite d'être connecté**
+- **Réponse**:
+```json
+{
+    "users": [
+        {
+            "id": 1,
+            "username": "votre_nom_utilisateur",
+            "email": "votre_email@example.com",
+            "created_at": "2025-06-17T21:10:11+00:00"
+        }
+    ]
+}
+```
+
 ## Exemples d'utilisation avec curl
 
 ### Inscription

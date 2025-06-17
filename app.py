@@ -94,6 +94,85 @@ def logout():
     session.pop('user_id', None)
     return jsonify({'message': 'Logged out successfully'}), 200
 
+@app.route('/user/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    data = request.get_json()
+    
+    # Vérifier que l'utilisateur est connecté
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Vérifier que l'utilisateur essaye de modifier son propre compte
+    if session['user_id'] != user_id:
+        return jsonify({'error': 'Cannot update another user'}), 403
+    
+    user = User.query.get_or_404(user_id)
+    
+    # Mettre à jour les champs si présents
+    if 'username' in data:
+        # Vérifier que le nouveau username n'est pas déjà utilisé
+        existing_user = User.query.filter_by(username=data['username']).first()
+        if existing_user and existing_user.id != user_id:
+            return jsonify({'error': 'Username already exists'}), 400
+        user.username = data['username']
+    
+    if 'email' in data:
+        # Vérifier que le nouvel email n'est pas déjà utilisé
+        existing_user = User.query.filter_by(email=data['email']).first()
+        if existing_user and existing_user.id != user_id:
+            return jsonify({'error': 'Email already exists'}), 400
+        user.email = data['email']
+    
+    if 'password' in data:
+        user.set_password(data['password'])
+    
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'User updated successfully',
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'created_at': user.created_at.isoformat()
+        }
+    })
+
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    # Vérifier que l'utilisateur est connecté
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Vérifier que l'utilisateur essaye de supprimer son propre compte
+    if session['user_id'] != user_id:
+        return jsonify({'error': 'Cannot delete another user'}), 403
+    
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    
+    # Déconnexion automatique après suppression
+    session.pop('user_id', None)
+    
+    return jsonify({
+        'message': 'User deleted successfully'
+    })
+
+@app.route('/users/delete-all', methods=['DELETE'])
+def delete_all_users():
+    # Vérifier que l'utilisateur est connecté
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Supprimer tous les utilisateurs sauf celui qui fait la requête
+    User.query.filter(User.id != session['user_id']).delete()
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'All users except current user deleted successfully'
+    })
+
 @app.route('/users', methods=['GET'])
 def get_users():
     if 'user_id' not in session:
