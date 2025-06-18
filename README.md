@@ -51,6 +51,142 @@ Pour plus de détails sur la configuration Docker et la gestion des données, vo
 }
 ```
 
+### 2. Créer un repas
+- **URL**: `/meals`
+- **Méthode**: POST
+- **Nécessite d'être connecté**
+- **Corps de la requête**:
+```json
+{
+    "name": "Nom du repas",
+    "ingredients": "Liste des ingrédients"
+}
+```
+- **Réponse en cas de succès**:
+```json
+{
+    "message": "Meal created successfully",
+    "meal": {
+        "id": 1,
+        "name": "Nom du repas",
+        "ingredients": "Liste des ingrédients",
+        "created_at": "2025-06-17T21:10:11+00:00",
+        "allergy_risk": 0
+    }
+}
+```
+
+### 3. Liste des repas
+- **URL**: `/meals`
+- **Méthode**: GET
+- **Nécessite d'être connecté**
+- **Réponse**:
+```json
+{
+    "meals": [
+        {
+            "id": 1,
+            "name": "Nom du repas",
+            "ingredients": "Liste des ingrédients",
+            "created_at": "2025-06-17T21:10:11+00:00",
+            "allergy_risk": 0
+        }
+    ]
+}
+```
+
+### 4. Mettre à jour un repas
+- **URL**: `/meals/<id>`
+- **Méthode**: PUT
+- **Nécessite d'être connecté et propriétaire du repas**
+- **Corps de la requête**:
+```json
+{
+    "name": "Nouveau nom",
+    "ingredients": "Nouvelle liste des ingrédients"
+}
+```
+- **Réponse en cas de succès**:
+```json
+{
+    "message": "Meal updated successfully",
+    "meal": {
+        "id": 1,
+        "name": "Nouveau nom",
+        "ingredients": "Nouvelle liste des ingrédients",
+        "created_at": "2025-06-17T21:10:11+00:00",
+        "allergy_risk": 0
+    }
+}
+```
+
+### 5. Supprimer un repas
+- **URL**: `/meals/<id>`
+- **Méthode**: DELETE
+- **Nécessite d'être connecté et propriétaire du repas**
+- **Réponse**:
+```json
+{
+    "message": "Meal deleted successfully"
+}
+```
+
+### 6. Déclarer une allergie
+- **URL**: `/meals/<id>/allergy`
+- **Méthode**: POST
+- **Nécessite d'être connecté et propriétaire du repas**
+- **Réponse**:
+```json
+{
+    "message": "Allergy declared successfully",
+    "meal": {
+        "id": 1,
+        "name": "Nom du repas",
+        "ingredients": "Liste des ingrédients",
+        "created_at": "2025-06-17T21:10:11+00:00",
+        "allergy_risk": 10
+    }
+}
+```
+
+### 7. Retirer une déclaration d'allergie
+- **URL**: `/meals/<id>/allergy`
+- **Méthode**: DELETE
+- **Nécessite d'être connecté et propriétaire du repas**
+- **Réponse**:
+```json
+{
+    "message": "Allergy declaration removed successfully",
+    "meal": {
+        "id": 1,
+        "name": "Nom du repas",
+        "ingredients": "Liste des ingrédients",
+        "created_at": "2025-06-17T21:10:11+00:00",
+        "allergy_risk": 0
+    }
+}
+
+### 8. Consulter un utilisateur
+- **URL**: `/users/<id>`
+- **Méthode**: GET
+- **Réponse**:
+```json
+{
+    "user": {
+        "id": 1,
+        "username": "votre_nom_utilisateur",
+        "email": "votre_email@example.com",
+        "created_at": "2025-06-17T21:10:11+00:00",
+        "confirmed_allergies": {
+            "Nom du repas": {
+                "ingredients": "Liste des ingrédients",
+                "risk_percentage": 30
+            }
+        }
+    }
+}
+```
+
 ### 2. Connexion (Login)
 - **URL**: `/login`
 - **Méthode**: POST

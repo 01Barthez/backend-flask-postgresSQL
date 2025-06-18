@@ -16,12 +16,33 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    meals = db.relationship('Meal', backref='user', lazy=True)
+    allergies = db.relationship('Allergy', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Meal(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    allergies = db.relationship('Allergy', backref='meal', lazy=True)
+
+    def calculate_allergy_risk(self):
+        if not self.allergies:
+            return 0
+        return len(self.allergies) * 10  # 10% par déclaration d'allergie
+
+class Allergy(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    meal_id = db.Column(db.Integer, db.ForeignKey('meal.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -186,6 +207,176 @@ def get_users():
             'email': user.email,
             'created_at': user.created_at.isoformat()
         } for user in users]
+    })
+
+# Routes pour les repas
+@app.route('/meals', methods=['POST'])
+def create_meal():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    data = request.get_json()
+    required_fields = ['name', 'ingredients']
+    missing_fields = [field for field in required_fields if not data.get(field)]
+    
+    if missing_fields:
+        return jsonify({
+            'error': f'Missing required fields: {", ".join(missing_fields)}'
+        }), 400
+    
+    meal = Meal(
+        name=data.get('name'),
+        ingredients=data.get('ingredients'),
+        user_id=session['user_id']
+    )
+    db.session.add(meal)
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Meal created successfully',
+        'meal': {
+            'id': meal.id,
+            'name': meal.name,
+            'ingredients': meal.ingredients,
+            'created_at': meal.created_at.isoformat(),
+            'allergy_risk': meal.calculate_allergy_risk()
+        }
+    }), 201
+
+@app.route('/meals', methods=['GET'])
+def get_meals():
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user = User.query.get(session['user_id'])
+    meals = user.meals
+    
+    return jsonify({
+        'meals': [{
+            'id': meal.id,
+            'name': meal.name,
+            'ingredients': meal.ingredients,
+            'created_at': meal.created_at.isoformat(),
+            'allergy_risk': meal.calculate_allergy_risk()
+        } for meal in meals]
+    })
+
+@app.route('/meals/<int:meal_id>', methods=['PUT'])
+def update_meal(meal_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    meal = Meal.query.get_or_404(meal_id)
+    if meal.user_id != session['user_id']:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    data = request.get_json()
+    meal.name = data.get('name', meal.name)
+    meal.ingredients = data.get('ingredients', meal.ingredients)
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Meal updated successfully',
+        'meal': {
+            'id': meal.id,
+            'name': meal.name,
+            'ingredients': meal.ingredients,
+            'created_at': meal.created_at.isoformat(),
+            'allergy_risk': meal.calculate_allergy_risk()
+        }
+    })
+
+@app.route('/meals/<int:meal_id>', methods=['DELETE'])
+def delete_meal(meal_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    meal = Meal.query.get_or_404(meal_id)
+    if meal.user_id != session['user_id']:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    db.session.delete(meal)
+    db.session.commit()
+    
+    return jsonify({'message': 'Meal deleted successfully'})
+
+# Routes pour les allergies
+@app.route('/meals/<int:meal_id>/allergy', methods=['POST'])
+def declare_allergy(meal_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    meal = Meal.query.get_or_404(meal_id)
+    if meal.user_id != session['user_id']:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    allergy = Allergy(
+        user_id=session['user_id'],
+        meal_id=meal_id
+    )
+    db.session.add(allergy)
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Allergy declared successfully',
+        'meal': {
+            'id': meal.id,
+            'name': meal.name,
+            'ingredients': meal.ingredients,
+            'created_at': meal.created_at.isoformat(),
+            'allergy_risk': meal.calculate_allergy_risk()
+        }
+    })
+
+@app.route('/meals/<int:meal_id>/allergy', methods=['DELETE'])
+def remove_allergy(meal_id):
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    allergy = Allergy.query.filter_by(
+        user_id=session['user_id'],
+        meal_id=meal_id
+    ).order_by(Allergy.created_at.desc()).first()
+    
+    if not allergy:
+        return jsonify({'error': 'No allergy declaration found'}), 404
+    
+    db.session.delete(allergy)
+    db.session.commit()
+    
+    meal = Meal.query.get(meal_id)
+    return jsonify({
+        'message': 'Allergy declaration removed successfully',
+        'meal': {
+            'id': meal.id,
+            'name': meal.name,
+            'ingredients': meal.ingredients,
+            'created_at': meal.created_at.isoformat(),
+            'allergy_risk': meal.calculate_allergy_risk()
+        }
+    })
+
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get_or_404(user_id)
+    
+    # Calculer les allergies confirmées
+    confirmed_allergies = {}
+    for meal in user.meals:
+        if meal.calculate_allergy_risk() >= 30:
+            confirmed_allergies[meal.name] = {
+                'ingredients': meal.ingredients,
+                'risk_percentage': meal.calculate_allergy_risk()
+            }
+    
+    return jsonify({
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'created_at': user.created_at.isoformat(),
+            'confirmed_allergies': confirmed_allergies
+        }
     })
 
 def wait_for_db():
