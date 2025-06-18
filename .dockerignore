@@ -27,9 +27,11 @@ htmlcov/
 .nojunk
 
 # Local development data
-Python_Docker_Image/data/
+data/
 
 # Include required files
 !requirements.txt
 !app.py
-!Python_Docker_Image/init_db.py
+!init_db.py
+!Dockerfile
+!docker-compose.yml

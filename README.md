@@ -2,18 +2,28 @@
 
 Une API simple pour la gestion des utilisateurs avec Flask, PostgreSQL et SQLAlchemy.
 
-## Installation
+## Installation avec Docker
 
 1. Assurez-vous d'avoir Docker et Docker Compose installés
 
 2. Clonez le repository
 
-3. Lancez les conteneurs avec :
+3. Dans le dossier racine du projet, lancez :
 ```bash
-docker-compose up --build
+# Construire et démarrer les conteneurs
+docker-compose -f docker-compose.yml up --build
 ```
 
 L'application sera accessible sur http://localhost:5000
+
+## Persistance des données
+
+Les données de la base de données sont stockées dans le dossier `data/`. Cela signifie que :
+- Les données sont conservées même après l'arrêt des conteneurs
+- Les données sont restaurées automatiquement lors du redémarrage
+- Le dossier `data/` doit être préservé pour conserver les données
+
+Pour plus de détails sur la configuration Docker et la gestion des données, voir [README_DOCKER.md](README_DOCKER.md)
 
 ## Endpoints
 
