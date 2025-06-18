@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "6d363fa1-10d7-4126-8ead-67e6a5fce025",
+		"name": "Meal-Allergy-Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36640736"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Voirs les users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Barthez\",\n    \"email\": \"barthez@gmail.com\",\n    \"password\": \"password1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Barthez\",\n    \"password\": \"password1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier Users",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Yohan Francklin\",\n    \"email\": \"yohan@yahoo.com\",\n    \"password\": \"password1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer un User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer Tous les Users",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/idaazdnzkdnkz",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"idaazdnzkdnkz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Voir un User",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/users/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Meals",
+			"item": [
+				{
+					"name": "Add Meal",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"haricot baton de manioc\",\n    \"ingredients\": \"manioc, haricot, huile rouge, sel, cube, condiment, tomate\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/meals",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"meals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Meal",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"couscous ndollès\",\n    \"ingredients\": \"couscous, ndollè, viande, cube, sel, huile, piment, ail, oignon, djançant\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/meals/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"meals",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Meals",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/meals",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"meals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Meal",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"couscous ndollès\",\n    \"ingredients\": \"couscous, ndollè, viande, cube, sel, huile, piment, ail, oignon, djançant\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}/meals/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"meals",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Allergy",
+			"item": [
+				{
+					"name": "Add Allergy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/meals/2/allergy",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"meals",
+								"2",
+								"allergy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Allergy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/meals/1/allergy",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"meals",
+								"1",
+								"allergy"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Home",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

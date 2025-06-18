@@ -19,6 +19,7 @@ flask/
 La base de données PostgreSQL est configurée pour être persistante. Les données sont stockées dans le dossier `data/` qui est monté comme volume dans le conteneur PostgreSQL.
 
 Cela signifie que :
+
 1. Les données de la base de données sont conservées même après l'arrêt des conteneurs
 2. Les données sont restaurées automatiquement lors du redémarrage
 3. Le dossier `data/` doit être préservé pour conserver les données
@@ -28,15 +29,18 @@ Cela signifie que :
 1. Assurez-vous d'avoir Docker et Docker Compose installés
 
 2. Dans le dossier racine du projet, exécutez :
+
 ```bash
 # Construire et démarrer les conteneurs
 docker-compose up --build
 ```
-L'application sera accessible sur http://localhost:5000
+
+L'application sera accessible sur <http://localhost:5000>
 
 ## Comment arrêter l'application
 
 Pour arrêter proprement l'application :
+
 ```bash
 # Arrêter les conteneurs
 docker-compose down
@@ -46,6 +50,7 @@ docker-compose down
 
 - Les données sont stockées dans le dossier `data/`
 - Pour supprimer complètement les données (attention, cela supprime TOUTES les données) :
+
 ```bash
 # Arrêter les conteneurs et supprimer les volumes
 docker-compose down -v
@@ -56,6 +61,7 @@ rm -rf data/
 ## Redémarrage avec données persistantes
 
 Pour redémarrer l'application avec les données précédentes :
+
 ```bash
 # Arrêter les conteneurs existants
 docker-compose down
