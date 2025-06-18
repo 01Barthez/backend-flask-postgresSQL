@@ -8,6 +8,31 @@ app.config['SECRET_KEY'] = 'your-secret-key-here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@db:5432/flask_app'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+@app.route('/')
+def index():
+    return jsonify({
+        'message': "Bienvenue dans l'API de gestion des repas et allergies",
+        'description': 'Cette API permet de gérer les utilisateurs, leurs repas et leurs allergies',
+        'endpoints': {
+            'auth': {
+                'register': '/register (POST)',
+                'login': '/login (POST)',
+                'logout': '/logout (POST)',
+                'users': '/users (GET)',
+                'user': '/user/<id> (GET, PUT, DELETE)',
+                'delete_all': '/users/delete-all (DELETE)'
+            },
+            'meals': {
+                'create': '/meals (POST)',
+                'list': '/meals (GET)',
+                'update': '/meals/<id> (PUT)',
+                'delete': '/meals/<id> (DELETE)',
+                'allergy': '/meals/<id>/allergy (POST, DELETE)'
+            }
+        },
+        'documentation': 'Voir le README.md pour plus de détails'
+    })
+
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -402,3 +427,5 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port=5000)
     else:
         print("Impossible de se connecter à la base de données après plusieurs tentatives")
+
+µ

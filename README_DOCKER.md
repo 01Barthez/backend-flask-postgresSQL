@@ -30,9 +30,8 @@ Cela signifie que :
 2. Dans le dossier racine du projet, exécutez :
 ```bash
 # Construire et démarrer les conteneurs
-docker-compose -f docker-compose.yml up --build
+docker-compose up --build
 ```
-
 L'application sera accessible sur http://localhost:5000
 
 ## Comment arrêter l'application
@@ -40,7 +39,7 @@ L'application sera accessible sur http://localhost:5000
 Pour arrêter proprement l'application :
 ```bash
 # Arrêter les conteneurs
-docker-compose -f docker-compose.yml down
+docker-compose down
 ```
 
 ## Sauvegarde des données
@@ -49,7 +48,7 @@ docker-compose -f docker-compose.yml down
 - Pour supprimer complètement les données (attention, cela supprime TOUTES les données) :
 ```bash
 # Arrêter les conteneurs et supprimer les volumes
-docker-compose -f docker-compose.yml down -v
+docker-compose down -v
 # Supprimer le dossier data
 rm -rf data/
 ```
@@ -59,10 +58,10 @@ rm -rf data/
 Pour redémarrer l'application avec les données précédentes :
 ```bash
 # Arrêter les conteneurs existants
-docker-compose -f docker-compose.yml down
+docker-compose down
 
 # Redémarrer avec les données précédentes
-docker-compose -f docker-compose.yml up --build
+docker-compose up --build
 ```
 
 Les données de la base de données seront automatiquement restaurées depuis le dossier `data/`
